@@ -1,0 +1,52 @@
+#include<bits/stdc++.h>
+#define maxc 1001
+#define maxn 150
+using namespace std;
+int dp[maxc][maxn];
+int price[maxc];
+int weight[maxc];
+bool visited[maxc][maxn];
+
+int func(int i,int w,int n,int cap)
+{
+    int profit1,profit2;
+    if(i==n+1)
+        return 0;
+    if(visited[i][w])
+        return dp[i][w];
+    int ans=0;
+    if(w+weight[i]<=cap)
+        profit1=price[i]+func(i+1,w+weight[i],n,cap);
+    else
+        profit1=0;
+    profit2=func(i+1,w,n,cap);
+    ans=max(profit1,profit2);
+    visited[i][w]=1;
+    dp[i][w]=ans;
+    return dp[i][w];
+}
+int main()
+{
+    int test,n,p,cap;
+    cin>>test;
+    while(test--)
+    {
+        cin>>n;
+        for(int i=1;i<=n;i++)
+        {
+            cin>>price[i]>>weight[i];
+        }
+        cin>>p;
+        int sum=0;
+        for(int i=1;i<=p;i++)
+        {
+            cin>>cap;
+            memset(dp,0,sizeof dp);
+            memset(visited,0,sizeof visited);
+            sum=sum+func(1,0,n,cap);
+        }
+        cout<<sum<<endl;
+    }
+
+    return 0;
+}
